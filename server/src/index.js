@@ -1,7 +1,7 @@
 const express = require('express');
 const http = require('http');
 
-const webPort = 80;
+const webPort = 8080;
 const webApp = express();
 const webServer = http.Server(webApp);
 
