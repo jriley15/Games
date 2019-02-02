@@ -1,37 +1,37 @@
-const express = require('express');
+const fs = require('fs');
 const http = require('http');
+const https = require('https');
 
-const webPort = 8080;
-const webApp = express();
-const webServer = http.Server(webApp);
+const express = require('express');
+const app = express();
 
-const socketPort = 9000;
-const socketApp = express();
-const socketServer = http.Server(socketApp);
+// Certificate
+const privateKey = fs.readFileSync(__dirname + '/keys/private.key', 'utf8');
+const certificate = fs.readFileSync(__dirname + '/keys/certificate.crt', 'utf8');
+const ca = fs.readFileSync(__dirname + '/keys/ca_bundle.crt', 'utf8');
 
-const io = require('socket.io')(socketServer);
+const credentials = {
+	key: privateKey,
+	cert: certificate,
+	ca: ca
+};
+
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+const io = require('socket.io')(httpsServer);
+
 const Tetris = require('./tetris/Game');
 const Haxball = require('./haxball/Game');
 
 
-//Web app static server
+app.use(express.static('public'));
 
-webApp.use(express.static('../public'));
-
-webApp.get('/tetris', function (req, res) {
-    res.sendFile('tetris.html', { root:"../public" } );
+app.get('/tetris', function (req, res) {
+    res.sendFile('tetris.html', { root:"public" } );
 })
-webApp.get('/haxball', function (req, res) {
-    res.sendFile('haxball.html', { root:"../public" } );
+app.get('/haxball', function (req, res) {
+    res.sendFile('haxball.html', { root:"public" } );
 })
-
-webServer.listen(webPort, function() {
-    console.log('Web server listening on port ' + webPort);
-});
-
-
-
-//web sockets game server
 
 const tetrisIO = io.of('/tetris');
 var tetris = new Tetris();
@@ -43,6 +43,14 @@ haxball.initialize(haxballIO);
 
 
 
-socketServer.listen(socketPort, function() {
-    console.log('Socket server listening on port ' + socketPort);
+
+httpServer.listen(80, function() {
+    console.log('HTTP server listening on port 80');
 });
+
+httpsServer.listen(443, function() {
+    console.log('HTTPS server listening on port 443');
+});
+
+
+
