@@ -24,7 +24,8 @@ const Tetris = require('./tetris/Game');
 const Haxball = require('./haxball/Game');
 
 
-//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
+
 app.get('/', function (req, res) {
     res.sendFile('tetris.html', { root:"public" } );
 })
