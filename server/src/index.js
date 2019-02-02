@@ -6,9 +6,9 @@ const express = require('express');
 const app = express();
 
 // Certificate
-const privateKey = fs.readFileSync(__dirname + '/keys/private.key', 'utf8');
-const certificate = fs.readFileSync(__dirname + '/keys/certificate.crt', 'utf8');
-const ca = fs.readFileSync(__dirname + '/keys/ca_bundle.crt', 'utf8');
+const privateKey = fs.readFileSync('./keys/private.key', 'utf8');
+const certificate = fs.readFileSync('./keys/certificate.crt', 'utf8');
+const ca = fs.readFileSync('./keys/ca_bundle.crt', 'utf8');
 
 const credentials = {
 	key: privateKey,
@@ -24,8 +24,10 @@ const Tetris = require('./tetris/Game');
 const Haxball = require('./haxball/Game');
 
 
-app.use(express.static('public'));
-
+//app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', function (req, res) {
+    res.sendFile('tetris.html', { root:"public" } );
+})
 app.get('/tetris', function (req, res) {
     res.sendFile('tetris.html', { root:"public" } );
 })
