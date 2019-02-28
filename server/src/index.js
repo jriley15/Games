@@ -18,7 +18,7 @@ const credentials = {
 
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
-const io = require('socket.io')(httpsServer);
+const io = require('socket.io')(httpServer);
 
 const Tetris = require('./tetris/Game');
 const Haxball = require('./haxball/Game');
