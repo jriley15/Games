@@ -47,13 +47,14 @@ haxball.initialize(haxballIO);
 
 
 
-httpServer.listen(80, function() {
-    console.log('HTTP server listening on port 80');
+httpServer.listen(3001, function() {
+    console.log('HTTP server listening on port 3001');
 });
 
+/*
 httpsServer.listen(443, function() {
     console.log('HTTPS server listening on port 443');
 });
-
+*/
 
 
